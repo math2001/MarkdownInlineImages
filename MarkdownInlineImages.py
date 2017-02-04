@@ -46,6 +46,13 @@ class MarkdownInlineImagesCommand(sublime_plugin.TextCommand):
                 url = os.path.join(os.path.dirname(v.file_name()), url)
             self.images[url] = region
 
+        links_definitions = get_link_definitions(v)
+        references = v.find_by_selector('constant.other.reference.link.markdown')
+        descriptions = v.find_by_selector('string.other.link.description.markdown')
+        for region in v.find_by_selector('meta.image.reference.markdown'):
+            ref = get_ref(v, region, references, descriptions)
+            self.images[links_definitions[ref]] = region
+
         for url in self.images.keys():
             try:
                 ImageManager.get(url, self.render_image)
