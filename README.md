@@ -49,3 +49,5 @@ Open up your settings:
 And set the setting `display_image_above_markup` to `true`. Here's what you'll get:
 
 ![display_image_above_markup](screenshots/display_image_above_markup.png)
+
+**Pro tip**: images are clickable.
