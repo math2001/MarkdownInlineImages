@@ -1,0 +1,22 @@
+[
+    {
+        "id": "preferences",
+        "children": [
+            {
+                "caption": "Package Settings",
+                "mnemonic": "P",
+                "id": "package-settings",
+                "children": [
+                    {
+                        "caption": "MarkdownInlineImages",
+                        "command": "edit_settings",
+                        "args": {
+                            "base_file": "${packages}/MarkdownInlineImages/MarkdownInlineImages.sublime-settings",
+                            "default": "// Your settings for MarkdownInlineImages. See the default file to see the different options. \n{\n\t$0\n}\n"
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+]
