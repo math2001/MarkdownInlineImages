@@ -2,6 +2,7 @@
 
 import sublime
 import sublime_plugin
+import os.path
 from .image_manager import ImageManager, ImageManagerError, clear_cache
 
 class MarkdownInlineImagesCommand(sublime_plugin.TextCommand):
@@ -31,7 +32,10 @@ class MarkdownInlineImagesCommand(sublime_plugin.TextCommand):
         self.images = {}
 
         for region in v.find_by_selector('markup.underline.link.image.markdown'):
-            self.images[v.substr(region)] = region
+            url = v.substr(region)
+            if not url.startswith(('https://', 'http://')):
+                url = os.path.join(os.path.dirname(v.file_name()), url)
+            self.images[url] = region
 
         for url in self.images.keys():
             try:
