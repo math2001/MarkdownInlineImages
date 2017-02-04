@@ -6,6 +6,9 @@ import os.path
 from .functions import *
 from .image_manager import ImageManager, ImageManagerError, clear_cache
 
+class settings:
+    CURRENT_CHANGE_COUNT = 'markdown_inline_image_current_change_count'
+
 class MarkdownInlineImagesCommand(sublime_plugin.TextCommand):
 
     def open_url(self, url):
@@ -48,6 +51,25 @@ class MarkdownInlineImagesCommand(sublime_plugin.TextCommand):
                 ImageManager.get(url, self.render_image)
             except ImageManagerError as e:
                 sublime.error_message(str(e))
+
+
+    def clear_action(self):
+        """Remove the images"""
+        self.phantom_set.update([])
+
+    def toggle_action(self):
+        """Updates the images, but, if it is re-called without any modification being made to the
+        buffer, then it hide them"""
+        v = self.view
+        vsettings = v.settings()
+        change_count = vsettings.get(settings.CURRENT_CHANGE_COUNT)
+        if change_count == v.change_count():
+            self.run(None, 'clear')
+            vsettings.erase(settings.CURRENT_CHANGE_COUNT)
+        else:
+            self.run(None, 'render')
+            v.settings().set(settings.CURRENT_CHANGE_COUNT, v.change_count())
+
 
     def clear_cache_action(self):
         clear_cache()

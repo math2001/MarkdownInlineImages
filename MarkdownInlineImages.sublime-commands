@@ -3,7 +3,7 @@
         "caption": "MarkdownInlineImages: Render Images",
         "command": "markdown_inline_images",
         "args": {
-            "action": "render"
+            "action": "toggle"
         }
     },
     {

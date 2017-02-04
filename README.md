@@ -10,4 +10,19 @@ plugin just completes this gap :smile:
 So, to use it, just press <kbd>alt+i</kbd>, or, from the command palette, select
 `MarkdownInlineImages: Render Images`. All the images will rendered.
 
-You can use images loaded from internet, or relative to your *file*.
+#### Understanding the *actual* behaviour
+
+When you press <kbd>alt+i</kbd>, the image are rendered, *except* if you haven't made **any** change
+to the buffer, it'll hide all of them. So, if you want to hide the images, just press twice
+<kbd>alt+i</kbd>.
+
+## Which images can I load?
+
+You can use images loaded from internet, or relative to your *file*. The support formats are:
+
+- `PNG`
+- `BMP`
+- `JPG`
+- `GIF`
+
+**Note**: *Every* images rendered is cached in a single file. Even the local ones.
