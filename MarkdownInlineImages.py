@@ -15,11 +15,13 @@ class MarkdownInlineImagesCommand(sublime_plugin.TextCommand):
             # CSW: ignore
             print(msg)
             return sublime.status_message(msg)
-        image_tag = '<a href="{}"><img src="{}"></a>'.format(image_url, base64)
+        html = '<style>{}</style>'.format(sublime.load_resource('Packages/MarkdownInlineImages/'
+                                                                'default.css'))
+        html += '<a href="{}"><img src="{}"></a>'.format(image_url, base64)
         for url, region in self.images.items():
             if url != image_url:
                 continue
-            ph = self.phantom_set.phantoms + [sublime.Phantom(region, image_tag, sublime.LAYOUT_BLOCK,
+            ph = self.phantom_set.phantoms + [sublime.Phantom(region, html, sublime.LAYOUT_BLOCK,
                                                  self.open_url)]
         self.phantom_set.update(ph)
 
