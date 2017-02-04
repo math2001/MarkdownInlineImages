@@ -1,7 +1,7 @@
 Fast:
 
 Medium:
-  ☐ need to support multiple references to the *same* image
+  ☐ support inline images
 
 Long:
 
@@ -9,6 +9,7 @@ Unknown:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ need to support multiple references to the *same* image @done Sat 04 Feb 2017 at 22:09 @project(Medium)
  ✔ support [link][like-this] @done Sat 04 Feb 2017 at 22:01 @project(Long)
  ✔ fix error base64 decode fail @done Sat 04 Feb 2017 at 19:05 @project(Unknown)
  ✔ display_image_above_markup @done Sat 04 Feb 2017 at 18:58 @project(Fast)

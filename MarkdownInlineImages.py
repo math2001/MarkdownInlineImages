@@ -24,16 +24,16 @@ class MarkdownInlineImagesCommand(sublime_plugin.TextCommand):
         html = '<style>{}</style>'.format(sublime.load_resource('Packages/MarkdownInlineImages/'
                                                                 'default.css'))
         html += '<a href="{}"><img src="{}"></a>'.format(image_url, base64)
-        sublime.set_clipboard(html)
         display_above = get_settings().get('display_image_above_markup')
-        for url, region in self.images.items():
+        for url, regions in self.images.items():
             if url != image_url:
                 continue
             if display_above:
-                region = sublime.Region(v.line(region.begin()).begin() - 1)
-            ph = self.phantom_set.phantoms + [sublime.Phantom(region, html, sublime.LAYOUT_BLOCK,
-                                                 self.open_url)]
-        self.phantom_set.update(ph)
+                regions = [sublime.Region(v.line(region.begin()).begin() - 1) for region in regions]
+            phantoms = [] + self.phantom_set.phantoms
+            for region in regions:
+                phantoms.append(sublime.Phantom(region, html, sublime.LAYOUT_BLOCK, self.open_url))
+        self.phantom_set.update(phantoms)
 
     def render_action(self):
         v = self.view
@@ -44,14 +44,14 @@ class MarkdownInlineImagesCommand(sublime_plugin.TextCommand):
             url = v.substr(region)
             if not url.startswith(('https://', 'http://')):
                 url = os.path.join(os.path.dirname(v.file_name()), url)
-            self.images[url] = region
+            self.images.setdefault(url, []).append(region)
 
         links_definitions = get_link_definitions(v)
         references = v.find_by_selector('constant.other.reference.link.markdown')
         descriptions = v.find_by_selector('string.other.link.description.markdown')
         for region in v.find_by_selector('meta.image.reference.markdown'):
             ref = get_ref(v, region, references, descriptions)
-            self.images[links_definitions[ref]] = region
+            self.images.setdefault(links_definitions[ref], []).append(region)
 
         for url in self.images.keys():
             try:
