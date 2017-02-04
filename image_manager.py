@@ -13,6 +13,8 @@ TIMEOUT = 20 # seconds
 
 CACHE_FILE = os.path.join(tempfile.gettempdir(), 'SublimeTextMarkdownInlineImages.cache.txt')
 
+CACHE_LINE_SEPARATOR = '-%-CACHE-SEPARATOR-%-'
+
 class ImageManagerError(Exception):
     pass
 
@@ -43,21 +45,23 @@ class ImageManager:
     currently_loading_images = {}
 
     @classmethod
-    def get_cache_for(cls, path):
+    def get_cache_for(cls, url):
         if not os.path.exists(CACHE_FILE):
             return
         with open(CACHE_FILE) as fp:
             for line in fp:
                 line = line.split(CACHE_LINE_SEPARATOR, 1)
-                if line[0] == path:
+                if line[0] == url:
                     return line[1]
 
     @classmethod
-    def get_callback_for(cls, path, user_callback):
+    def get_callback_for(cls, url, user_callback):
         def callback(image_content):
             base64 = convert_to_base64(image_content)
-
-            user_callback(path, base64)
+            print('write cache', url)
+            with open(CACHE_FILE, 'a') as fp:
+                fp.write('\n' + url + CACHE_LINE_SEPARATOR + base64)
+            user_callback(url, base64)
         return callback
 
     @classmethod
@@ -71,7 +75,7 @@ class ImageManager:
 
         cache = cls.get_cache_for(url)
         if cache:
-            user_callback(cache)
+            return user_callback(url, cache)
 
         # actually load the image
         # _callback will save the image to the cache AND run the user callback with the base64 image
@@ -79,5 +83,8 @@ class ImageManager:
         cls.currently_loading_images[url] = ImageLoader(url, callback)
         cls.currently_loading_images[url].start()
 
-ImageManager.get("C:\\Users\\Home\\Pictures\\__bg\\penrose-triangle.jpg",
-                 lambda path, base64: print("Got '{}', '{}'".format(path, base64[:50])))
+if __name__ == '__main__':
+    callback = lambda path, base64: print("Got '{}', '{}'".format(path, base64[:50]))
+
+    ImageManager.get('https://i.ytimg.com/vi/C2O7lM0bU0g/maxresdefault.jpg', callback)
+    ImageManager.get("http://2017.animationdingle.com/wp-content/uploads/2016/08/hello_world.gif", callback)
