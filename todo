@@ -1,8 +1,15 @@
 Fast:
-  ☐ fix relative paths
+  ✔ display_image_above_markup @done Sat 04 Feb 2017 at 18:58
 
 Medium:
 
 
 Long:
   ☐ support [link][like-this]
+
+Unknown:
+  ☐ fix error base64 decode fail
+
+＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
+Archive:
+ ✔ fix relative paths @done Sat 04 Feb 2017 at 18:44 @project(Fast)

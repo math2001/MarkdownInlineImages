@@ -12,5 +12,13 @@
         "args": {
             "action": "clear cache"
         }
+    },
+    {
+        "caption": "Preferences: MarkdownInlineImages Settings",
+        "command": "edit_settings",
+        "args": {
+            "base_file": "$packages/MarkdownInlineImages/MarkdownInlineImages.sublime-settings",
+            "default": "// Your settings for MarkdownInlineImages. See the default file to see the different options. \n{\n\t$0\n}\n"
+        }
     }
 ]

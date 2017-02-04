@@ -3,6 +3,7 @@
 import sublime
 import sublime_plugin
 import os.path
+from .functions import *
 from .image_manager import ImageManager, ImageManagerError, clear_cache
 
 class MarkdownInlineImagesCommand(sublime_plugin.TextCommand):
@@ -11,6 +12,7 @@ class MarkdownInlineImagesCommand(sublime_plugin.TextCommand):
         sublime.run_command('open_url', {'url': url})
 
     def render_image(self, image_url, base64):
+        v = self.view
         if isinstance(base64, Exception):
             msg = "Cannot load '{}': {}".format(image_url, base64)
             # CSW: ignore
@@ -19,9 +21,12 @@ class MarkdownInlineImagesCommand(sublime_plugin.TextCommand):
         html = '<style>{}</style>'.format(sublime.load_resource('Packages/MarkdownInlineImages/'
                                                                 'default.css'))
         html += '<a href="{}"><img src="{}"></a>'.format(image_url, base64)
+        display_above = get_settings().get('display_image_above_markup')
         for url, region in self.images.items():
             if url != image_url:
                 continue
+            if display_above:
+                region = sublime.Region(v.line(region.begin()).begin() - 1)
             ph = self.phantom_set.phantoms + [sublime.Phantom(region, html, sublime.LAYOUT_BLOCK,
                                                  self.open_url)]
         self.phantom_set.update(ph)
@@ -47,6 +52,7 @@ class MarkdownInlineImagesCommand(sublime_plugin.TextCommand):
         clear_cache()
 
     def run(self, edit, action, *args, **kwargs):
+        """Run 'action' with the given arguments"""
         try:
             func = getattr(self, action.replace(' ', '_') + '_action')
         except AttributeError:

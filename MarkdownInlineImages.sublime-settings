@@ -1,0 +1,6 @@
+{
+
+    // if set to true, the images will be displayed above the image markup, instead of below.
+    "display_image_above_markup": false
+
+}
