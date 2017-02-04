@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 
 import tempfile
-import os.path
+import os
 import urllib.request
 from threading import Thread
 try:
@@ -9,11 +9,16 @@ try:
 except SystemError as e:
     from functions import *
 
+__all__ = ["clear_cache", "ImageManagerError", "ImageLoader", "ImageManager"]
+
 TIMEOUT = 20 # seconds
 
 CACHE_FILE = os.path.join(tempfile.gettempdir(), 'SublimeTextMarkdownInlineImages.cache.txt')
 
 CACHE_LINE_SEPARATOR = '-%-CACHE-SEPARATOR-%-'
+
+def clear_cache():
+    os.remove(CACHE_FILE)
 
 class ImageManagerError(Exception):
     pass
@@ -57,8 +62,10 @@ class ImageManager:
     @classmethod
     def get_callback_for(cls, url, user_callback):
         def callback(image_content):
+            del cls.currently_loading_images[url]
+            if isinstance(image_content, Exception):
+                return user_callback(url, image_content)
             base64 = convert_to_base64(image_content)
-            print('write cache', url)
             with open(CACHE_FILE, 'a') as fp:
                 fp.write('\n' + url + CACHE_LINE_SEPARATOR + base64)
             user_callback(url, base64)

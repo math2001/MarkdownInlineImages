@@ -1,0 +1,9 @@
+[
+    {
+        "keys": ["alt+i"],
+        "command": "markdown_inline_images",
+        "args": {
+            "action": "render"
+        }
+    }
+]

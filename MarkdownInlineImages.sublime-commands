@@ -1,0 +1,16 @@
+[
+    {
+        "caption": "MarkdownInlineImages: Render Images",
+        "command": "markdown_inline_images",
+        "args": {
+            "action": "render"
+        }
+    },
+    {
+        "caption": "MarkdownInlineImages: Clear the cache",
+        "command": "markdown_inline_images",
+        "args": {
+            "action": "clear cache"
+        }
+    }
+]
