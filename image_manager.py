@@ -54,7 +54,7 @@ class ImageManager:
         if not os.path.exists(CACHE_FILE):
             return
         with open(CACHE_FILE) as fp:
-            for line in fp:
+            for line in fp.read().splitlines():
                 line = line.split(CACHE_LINE_SEPARATOR, 1)
                 if line[0] == url:
                     return line[1]

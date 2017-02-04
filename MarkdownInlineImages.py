@@ -16,11 +16,12 @@ class MarkdownInlineImagesCommand(sublime_plugin.TextCommand):
         if isinstance(base64, Exception):
             msg = "Cannot load '{}': {}".format(image_url, base64)
             # CSW: ignore
-            print(msg)
+            print('MarkdownInlineImages:', msg)
             return sublime.status_message(msg)
         html = '<style>{}</style>'.format(sublime.load_resource('Packages/MarkdownInlineImages/'
                                                                 'default.css'))
         html += '<a href="{}"><img src="{}"></a>'.format(image_url, base64)
+        sublime.set_clipboard(html)
         display_above = get_settings().get('display_image_above_markup')
         for url, region in self.images.items():
             if url != image_url:
